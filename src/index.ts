@@ -1,18 +1,23 @@
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { getTokenLLM } from "./getTokenLLM";
 import { getTweets } from "./getTweet";
+import { swap } from "./swap";
 require('dotenv').config()
+
+const SOL_AMOUNT = 0.001 * LAMPORTS_PER_SOL;
 
 async function main(userId: string) {
     const newTweets = await getTweets(userId)
     console.log(newTweets);
-    
+    for (let tweet of newTweets) {
+        const tokenAddress = await getTokenLLM(tweet.contents)
+        console.log(tokenAddress);
+        if (tokenAddress !== "null") {
+            console.log(`trying to execute tweet => ${tweet.contents}`)
+            await swap(tokenAddress, SOL_AMOUNT);
+        }
+    }
 }
 
-// main("1354400126857605121")
-async function fetchTokenLLM() {
-    const response = await getTokenLLM(`I am selling all $FRIC. what do you think?
-    EsP4kJfKUDLfX274WoBSiiEy74Sh4tZKUCDjfULHpump`)
-    console.log(response);
-}
 
-fetchTokenLLM();
+main("1821987239645057025")

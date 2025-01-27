@@ -26,7 +26,7 @@ export async function getTweets(userId: string): Promise<Tweet[]> {
         const tweets: Tweet[] = tweetEntries.map((entry: any) => {
             const tweet = entry.content?.itemContent?.tweet_results?.result?.legacy;
             return {
-                content: tweet?.full_text || "",
+                contents: tweet?.full_text || "",
                 id: tweet?.id_str || "",
                 createdAt: tweet?.created_at || "",
             };
